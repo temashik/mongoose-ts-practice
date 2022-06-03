@@ -1,0 +1,17 @@
+doctype html
+html
+	head 
+		meta(charset='UTF-8')
+		title= title
+		style 
+			include style.css
+	body 
+		a(href='/db/create') Create
+		br
+		a(href='/db/read') Read
+		br
+		a(href='/db/update') Update
+		br
+		a(href='/db/delete') Delete
+		br
+		block content 

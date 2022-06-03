@@ -1,0 +1,11 @@
+extends base
+include mixin
+block content
+	form(name='form1' action="/db/update" method="post")
+		+ NCA
+		label(for="name") Id:  
+		input(type="text" value=id size='15' name='id' disabled='true')
+		input(type="submit" value="Update" onfocus="onclick")  
+	form(name='Delete' action="/db/delete-result" method="post")
+		input(value=id size='15' name='id' type='hidden')
+		input(type="submit" value="Delete" onfocus="onclick")

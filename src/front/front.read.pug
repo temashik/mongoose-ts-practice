@@ -1,0 +1,6 @@
+extends base
+include mixin
+block content
+	form(name='form1' action="/db/read-result" method="post")
+		+ NCA
+		input(type="submit" value="Search" onfocus="onclick")

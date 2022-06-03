@@ -1,0 +1,29 @@
+mixin NCA
+	label(for="name") Name:  
+	input(type="text" value=name size='15' name='name')
+	label(for="name") Cost:  
+	input(type="text" value=cost size='15' name='cost')
+	label(for="name") Amount:  
+	input(type="text" value=amount size='15' name='amount')
+
+mixin NCAread(i)
+	label(for="name") Name:  
+	input(type="text" value=result[i].name size='15' name='name')
+	label(for="name") Cost:  
+	input(type="text" value=result[i].cost size='15' name='cost')
+	label(for="name") Amount:  
+	input(type="text" value=result[i].amount size='15' name='amount')
+
+mixin NCAcreate 
+	label(for="name") Name:  
+	input(type="text" value=name size='15' name='name')
+	label(for="name") New name:  
+	input(type="text" size='15' name='newName')
+	label(for="name") Cost:  
+	input(type="text" value=cost size='15' name='cost')
+	label(for="name") New cost:  
+	input(type="text" size='15' name='newCost')
+	label(for="name") Amount:  
+	input(type="text" value=amount size='15' name='amount')
+	label(for="name") New amount:  
+	input(type="text" size='15' name='newAmount')

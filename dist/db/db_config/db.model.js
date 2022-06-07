@@ -29,5 +29,5 @@ const items = new mongoose_1.Schema({
     cost: { type: Number, required: true },
     amount: { type: Number, required: true },
 });
-exports.default = mongoose_1.default.model('ItemsModel', items);
+exports.default = mongoose_1.default.model('Abrakadabra', items);
 //# sourceMappingURL=db.model.js.map

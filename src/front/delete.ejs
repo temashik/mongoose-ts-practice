@@ -2,9 +2,11 @@
 <html>
 <head>
 	<title><%= title%></title>
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+<form action="/db/delete-result" method="post">
 <label for="name">Name: 
 	<input type="text" value=name size='15' name='name'></input>
 </label>
@@ -14,5 +16,7 @@
 <label for="amount">Amount: 
 	<input type="text" value=amount size='15' name='amount'></input>
 </label>
+<input type="submit" value="Create" onfocus="onclick">
+</form>
 </body>
 </html>

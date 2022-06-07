@@ -1,23 +1,23 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.appContainer = exports.app = exports.appBindings = void 0;
+const inversify_1 = require("inversify");
 const app_1 = require("./app");
-const mongodb_1 = require("./db/mongodb");
+const database_controller_1 = require("./db/database.controller");
 const logger_service_1 = require("./logger/logger.service");
+const types_1 = require("./types");
+exports.appBindings = new inversify_1.ContainerModule((bind) => {
+    bind(types_1.TYPES.ILogger).to(logger_service_1.LoggerService).inSingletonScope();
+    bind(types_1.TYPES.Application).to(app_1.App);
+    bind(types_1.TYPES.DatabaseController).to(database_controller_1.DatabaseController).inSingletonScope();
+});
 function bootstrap() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const app = new app_1.App(new logger_service_1.LoggerService());
-        yield app.init();
-        (0, mongodb_1.connect)();
-    });
+    const appContainer = new inversify_1.Container();
+    appContainer.load(exports.appBindings);
+    const app = appContainer.get(types_1.TYPES.Application);
+    app.init();
+    return { app, appContainer };
 }
-bootstrap();
+_a = bootstrap(), exports.app = _a.app, exports.appContainer = _a.appContainer;
 //# sourceMappingURL=main.js.map

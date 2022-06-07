@@ -12,4 +12,4 @@ const items: Schema = new Schema({
 	amount: { type: Number, required: true },
 });
 
-export default mongoose.model<IItems>('Abrakadabra', items);
+export default mongoose.model<IItems>('ItemsModel', items);

@@ -26,7 +26,7 @@ export class App {
 
 	useRoutes(): void {
 		this.app.use('/db', this.dbController.router);
-		this.app.use('/', this.dbController.ok);
+		//this.app.use('/', this.dbController.router);
 	}
 
 	useMiddleware(): void {

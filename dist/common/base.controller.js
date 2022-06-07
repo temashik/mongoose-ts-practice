@@ -26,7 +26,8 @@ let BaseContorller = class BaseContorller {
         return res.status(200).json(message);
     }
     ok(res, message) {
-        return this.send(res, 200, message);
+        res.type('application/json');
+        return res.status(200).json(message);
     }
     created(res) {
         return res.sendStatus(201);

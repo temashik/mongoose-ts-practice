@@ -13,16 +13,16 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
 		super(loggerService);
 		this.bindRoutes([
-			{ path: '/create-result', method: 'post', func: this.create },
+			/*{ path: '/create-result', method: 'post', func: this.create },
 			{ path: '/read-result', method: 'post', func: this.read },
 			{ path: '/update-result', method: 'post', func: this.update },
 			{ path: '/delete-result', method: 'post', func: this.delete },
 			{ path: '/create', method: 'get', func: this.createData },
 			{ path: '/read', method: 'get', func: this.readData },
 			{ path: '/update', method: 'post', func: this.updateData },
-			{ path: '/update', method: 'get', func: this.updateData },
+			{ path: '/update', method: 'get', func: this.updateData },*/
 			{ path: '/delete', method: 'get', func: this.deleteData },
-			{ path: '/items', method: 'get', func: this.items },
+			//{ path: '/items', method: 'get', func: this.items },
 		]);
 	}
 
@@ -162,7 +162,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	deleteData(req: Request, res: Response, next: NextFunction): void {
-		res.render('front.delete.pug', { title: 'Delete' });
+		res.render('delete.ejs', { title: 'Delete' });
 	}
 
 	items(req: Request, res: Response): void {

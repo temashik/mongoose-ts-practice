@@ -39,7 +39,7 @@ export class App {
 
 	public async init(): Promise<void> {
 		const db = 'mongodb://localhost:27017';
-		connecting({ db });
+		//connecting({ db });
 		this.useMiddleware();
 		this.useRoutes();
 		this.server = this.app.listen(this.port);

@@ -33,8 +33,8 @@ export class App {
 		this.app.use(json());
 		this.app.use(express.urlencoded());
 		this.app.use(express.static(path.join(__dirname, 'front')));
-		this.app.set('views', __dirname + '/front');
 		this.app.engine('html', consolidate.pug);
+		this.app.set('views', __dirname + '/front');
 		this.app.set('view engine', 'html');
 	}
 

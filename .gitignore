@@ -1,8 +1,7 @@
 /node_modules
-/src
+/dist
 /.vscode
 .prettierrc
 .eslintrc
 nodemon.json
-tsconfig.json
 package-lock.json

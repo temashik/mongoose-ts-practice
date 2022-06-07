@@ -1,9 +1,0 @@
-extends base
-include mixin
-block content
-	- for(let i = 0; i < result.length; i++)
-		form(name=`form${i}` action='/db/items' method="get")
-			label(for="name") We found your document with fields:
-			+ NCAread(i)
-			input(value=result[i]._id name='_id' type='hidden')
-			input(type="submit" value="View" onfocus="onclick")

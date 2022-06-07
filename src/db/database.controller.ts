@@ -162,7 +162,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	deleteData(req: Request, res: Response, next: NextFunction): void {
-		res.render('delete.ejs', { title: 'Delete' });
+		res.render('front.delete.pug', { title: 'Delete' });
 	}
 
 	items(req: Request, res: Response): void {

@@ -21,7 +21,9 @@ export abstract class BaseContorller {
 	}
 
 	public ok<T>(res: Response, message: T): ExpressReturnType {
-		return this.send<T>(res, 200, message);
+		//return this.send<T>(res, 200, message);
+		res.type('application/json');
+		return res.status(200).json(message);
 	}
 
 	public created(res: Response): ExpressReturnType {

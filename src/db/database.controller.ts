@@ -15,12 +15,12 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		this.bindRoutes([
 			/*{ path: '/create-result', method: 'post', func: this.create },
 			{ path: '/read-result', method: 'post', func: this.read },
-			{ path: '/update-result', method: 'post', func: this.update },
+			{ path: '/update-result', method: 'post', func: this.update },*/
 			{ path: '/delete-result', method: 'post', func: this.delete },
-			{ path: '/create', method: 'get', func: this.createData },
-			{ path: '/read', method: 'get', func: this.readData },
-			{ path: '/update', method: 'post', func: this.updateData },
-			{ path: '/update', method: 'get', func: this.updateData },*/
+			// { path: '/create', method: 'get', func: this.createData },
+			// { path: '/read', method: 'get', func: this.readData },
+			// { path: '/update', method: 'post', func: this.updateData },
+			// { path: '/update', method: 'get', func: this.updateData },
 			{ path: '/delete', method: 'get', func: this.deleteData },
 			//{ path: '/items', method: 'get', func: this.items },
 		]);

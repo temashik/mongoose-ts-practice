@@ -36,6 +36,7 @@ let DatabaseController = class DatabaseController extends base_controller_1.Base
         super(loggerService);
         this.loggerService = loggerService;
         this.bindRoutes([
+            { path: '/delete-result', method: 'post', func: this.delete },
             { path: '/delete', method: 'get', func: this.deleteData },
         ]);
     }

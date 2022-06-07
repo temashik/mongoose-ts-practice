@@ -31,6 +31,7 @@ const database_controller_1 = require("./db/database.controller");
 const inversify_1 = require("inversify");
 require("reflect-metadata");
 const types_1 = require("./types");
+const db_connect_1 = __importDefault(require("./db/db_config/db.connect"));
 const path_1 = __importDefault(require("path"));
 const consolidate_1 = __importDefault(require("consolidate"));
 let App = class App {
@@ -53,7 +54,8 @@ let App = class App {
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
-            const db = 'mongodb://localhost:27017';
+            const db = process.env.DB_URI || 'mongodb://localhost:27017';
+            (0, db_connect_1.default)({ db });
             this.useMiddleware();
             this.useRoutes();
             this.server = this.app.listen(this.port);

@@ -21,7 +21,7 @@ export class App {
 		@inject(TYPES.DatabaseController) private dbController: DatabaseController,
 	) {
 		this.app = express();
-		this.port = 8000;
+		this.port = +(process.env.PORT || 8000);
 	}
 
 	useRoutes(): void {

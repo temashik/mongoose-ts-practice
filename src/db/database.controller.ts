@@ -13,16 +13,16 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
 		super(loggerService);
 		this.bindRoutes([
-			/*{ path: '/create-result', method: 'post', func: this.create },
+			{ path: '/create-result', method: 'post', func: this.create },
 			{ path: '/read-result', method: 'post', func: this.read },
-			{ path: '/update-result', method: 'post', func: this.update },*/
+			{ path: '/update-result', method: 'post', func: this.update },
 			{ path: '/delete-result', method: 'post', func: this.delete },
-			// { path: '/create', method: 'get', func: this.createData },
-			// { path: '/read', method: 'get', func: this.readData },
-			// { path: '/update', method: 'post', func: this.updateData },
-			// { path: '/update', method: 'get', func: this.updateData },
+			{ path: '/create', method: 'get', func: this.createData },
+			{ path: '/read', method: 'get', func: this.readData },
+			{ path: '/update', method: 'post', func: this.updateData },
+			{ path: '/update', method: 'get', func: this.updateData },
 			{ path: '/delete', method: 'get', func: this.deleteData },
-			//{ path: '/items', method: 'get', func: this.items },
+			{ path: '/items', method: 'get', func: this.items },
 		]);
 	}
 
@@ -33,7 +33,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 			amount: req.body.amount,
 		})
 			.then((result) => {
-				res.render('front.create-result.pug', {
+				res.render('front.create-result.ejs', {
 					title: 'Create',
 					name: result.name,
 					cost: result.cost,
@@ -63,7 +63,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		query
 			.exec()
 			.then((result) => {
-				res.render('front.read-result.pug', {
+				res.render('front.read-result.ejs', {
 					title: 'Read',
 					result: result,
 				});
@@ -105,7 +105,6 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		}
 
 		query
-			//.updateMany({ name: req.body?.newName, cost: req.body?.newCost, amount: req.body?.newAmount })
 			.exec()
 			.then((result) => {
 				res.json(result);
@@ -116,7 +115,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	delete(req: Request, res: Response, next: NextFunction): void {
-		if (!req.body?.name && !req.body?.cost && !req.body?.amount && !req.body?.id) {
+		if (!req.body?.name && !req.body?.cost && !req.body?.amount && !req.body?._id) {
 			this.loggerService.warn('Cant find document to delete');
 		}
 		const query = ItemsModel.where();
@@ -129,8 +128,8 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		if (req.body?.amount) {
 			query.where('amount').equals(req.body?.amount);
 		}
-		if (req.body?.id) {
-			query.where('_id').equals(req.body?.id);
+		if (req.body?._id) {
+			query.where('_id').equals(req.body?._id);
 		}
 
 		query
@@ -145,15 +144,15 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	createData(req: Request, res: Response, next: NextFunction): void {
-		res.render('front.create.pug', { title: 'Create' });
+		res.render('front.create.ejs', { title: 'Create' });
 	}
 
 	readData(req: Request, res: Response, next: NextFunction): void {
-		res.render('front.read.pug', { title: 'Read' });
+		res.render('front.read.ejs', { title: 'Read' });
 	}
 
 	updateData(req: Request, res: Response, next: NextFunction): void {
-		res.render('front.update.pug', {
+		res.render('front.update.ejs', {
 			title: 'Update',
 			name: req.body?.name,
 			cost: req.body?.cost,
@@ -162,7 +161,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	deleteData(req: Request, res: Response, next: NextFunction): void {
-		res.render('delete.ejs', { title: 'Delete' });
+		res.render('front.delete.ejs', { title: 'Delete' });
 	}
 
 	items(req: Request, res: Response): void {
@@ -183,12 +182,12 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		query
 			.exec()
 			.then((result) => {
-				res.render('front.items.pug', {
+				res.render('front.items.ejs', {
 					title: 'Items',
 					name: result[0].name,
 					cost: result[0].cost,
 					amount: result[0].amount,
-					id: result[0]._id,
+					_id: result[0]._id,
 				});
 			})
 			.catch((error: Error) => {

@@ -26,7 +26,6 @@ export class App {
 
 	useRoutes(): void {
 		this.app.use('/db', this.dbController.router);
-		//this.app.use('/', this.dbController.router);
 	}
 
 	useMiddleware(): void {
@@ -34,7 +33,7 @@ export class App {
 		this.app.use(express.urlencoded());
 		this.app.use(express.static(path.join(__dirname, 'front')));
 		this.app.engine('html', consolidate.ejs);
-		this.app.set('views', __dirname + '/front');
+		this.app.set('views', __dirname + '/front/pages');
 		this.app.set('view engine', 'html');
 	}
 

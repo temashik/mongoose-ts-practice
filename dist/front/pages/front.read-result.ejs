@@ -6,7 +6,7 @@
 
 <body>
 <% for(var i=0; i < result.length; i++) {%>
-<form action="/db/read-result" method="post"  class="contentWrapper">
+<form action="/read-result" method="post"  class="contentWrapper">
 <label for="name">We found your document with fields: </label>
 <label for="name">Name: </label>
 <input type="text" value="<%= result[i].name%>" size='15' name='name'>

@@ -9,6 +9,7 @@ import { TYPES } from './types';
 import connecting from './db/db_config/db.connect';
 import path from 'path';
 import consolidate from 'consolidate';
+import { UsersController } from './users/users.controller';
 
 @injectable()
 export class App {
@@ -19,13 +20,15 @@ export class App {
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
 		@inject(TYPES.DatabaseController) private dbController: DatabaseController,
+		@inject(TYPES.UsersController) private usersController: UsersController,
 	) {
 		this.app = express();
 		this.port = +(process.env.PORT || 8000);
 	}
 
 	useRoutes(): void {
-		this.app.use('/db', this.dbController.router);
+		this.app.use('/', this.dbController.router);
+		this.app.use('/', this.usersController.router);
 	}
 
 	useMiddleware(): void {

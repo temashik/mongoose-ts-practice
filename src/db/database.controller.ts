@@ -5,7 +5,7 @@ import { BaseContorller } from '../common/base.controller';
 import { ILogger } from '../logger/logger.interface';
 import { TYPES } from '../types';
 import { IDbController } from './database.controller.interface';
-import ItemsModel, { IItems } from './db_config/db.model';
+import ItemsModel from './db_config/db.model';
 import url from 'url';
 
 @injectable()
@@ -27,27 +27,38 @@ export class DatabaseController extends BaseContorller implements IDbController 
 	}
 
 	async create(req: Request, res: Response, next: NextFunction): Promise<void> {
-		ItemsModel.create({
+		if (!req.body.name || !req.body.cost || !req.body.amount) {
+			res.json({
+				eMsg: 'You must fill all fields',
+			});
+			return;
+		}
+		await ItemsModel.create({
 			name: req.body.name,
 			cost: req.body.cost,
 			amount: req.body.amount,
 		})
 			.then((result) => {
-				res.render('front.create-result.ejs', {
-					title: 'Create',
+				res.json({
 					name: result.name,
 					cost: result.cost,
 					amount: result.amount,
+					_id: result._id,
 				});
 			})
 			.catch((error: Error) => {
-				throw error;
+				res.json({
+					err: error.message,
+				});
 			});
 	}
 
-	read(req: Request, res: Response, next: NextFunction): void {
+	async read(req: Request, res: Response, next: NextFunction): Promise<void> {
 		if (!req.body?.name && !req.body?.cost && !req.body?.amount) {
-			this.loggerService.warn('No args for search');
+			res.json({
+				eMsg: 'Cant find any document, enter at least 1 key to find',
+			});
+			return;
 		}
 		const query = ItemsModel.find();
 		if (req.body?.name) {
@@ -60,25 +71,39 @@ export class DatabaseController extends BaseContorller implements IDbController 
 			query.where('amount').equals(req.body?.amount);
 		}
 
-		query
+		await query
 			.exec()
 			.then((result) => {
-				res.render('front.read-result.ejs', {
-					title: 'Read',
-					result: result,
-				});
+				if (result.length == 0) {
+					res.json({
+						eMsg: 'We found nothing, try again',
+					});
+				} else {
+					res.render('front.read-result.ejs', {
+						title: 'Read',
+						result: result,
+					});
+				}
 			})
 			.catch((error: Error) => {
-				throw error;
+				res.json({
+					err: error.message,
+				});
 			});
 	}
 
-	update(req: Request, res: Response, next: NextFunction): void {
+	async update(req: Request, res: Response, next: NextFunction): Promise<void> {
 		if (!req.body?.name && !req.body?.cost && !req.body?.amount) {
-			this.loggerService.warn('What you want to change?');
+			res.json({
+				eMsg: 'What you want to change?',
+			});
+			return;
 		}
 		if (!req.body?.newName && !req.body?.newCost && !req.body?.newAmount) {
-			this.loggerService.warn('What change you want to do?');
+			res.json({
+				eMsg: 'What change you want to do?',
+			});
+			return;
 		}
 
 		const query = ItemsModel.where();
@@ -104,19 +129,30 @@ export class DatabaseController extends BaseContorller implements IDbController 
 			query.updateMany({ cost: req.body?.newCost });
 		}
 
-		query
+		await query
 			.exec()
-			.then((result) => {
-				res.json(result);
+			.then((result: any) => {
+				if (result.modifiedCount == 0) {
+					res.json({
+						eMsg: 'Nothing was updated',
+					});
+				} else {
+					res.json(result);
+				}
 			})
 			.catch((error: Error) => {
-				throw error;
+				res.json({
+					err: error.message,
+				});
 			});
 	}
 
-	delete(req: Request, res: Response, next: NextFunction): void {
+	async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
 		if (!req.body?.name && !req.body?.cost && !req.body?.amount && !req.body?._id) {
-			this.loggerService.warn('Cant find document to delete');
+			res.json({
+				eMsg: 'Cant find any document to delete, enter at least 1 key to find',
+			});
+			return;
 		}
 		const query = ItemsModel.where();
 		if (req.body?.name) {
@@ -132,14 +168,22 @@ export class DatabaseController extends BaseContorller implements IDbController 
 			query.where('_id').equals(req.body?._id);
 		}
 
-		query
+		await query
 			.deleteMany()
 			.exec()
 			.then((result) => {
-				res.json(result);
+				if (result.deletedCount == 0) {
+					res.json({
+						eMsg: 'Nothing was deleted',
+					});
+				} else {
+					res.json(result);
+				}
 			})
 			.catch((error: Error) => {
-				throw error;
+				res.json({
+					err: error.message,
+				});
 			});
 	}
 
@@ -164,7 +208,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		res.render('front.delete.ejs', { title: 'Delete' });
 	}
 
-	items(req: Request, res: Response): void {
+	async items(req: Request, res: Response): Promise<void> {
 		const queryObject = url.parse(req.url, true).query;
 		const query = ItemsModel.find();
 		if (queryObject?.name) {
@@ -179,7 +223,7 @@ export class DatabaseController extends BaseContorller implements IDbController 
 		if (queryObject?._id) {
 			query.where('_id').equals(queryObject?._id);
 		}
-		query
+		await query
 			.exec()
 			.then((result) => {
 				res.render('front.items.ejs', {

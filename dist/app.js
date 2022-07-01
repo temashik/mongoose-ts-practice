@@ -35,6 +35,8 @@ const db_connect_1 = __importDefault(require("./db/db_config/db.connect"));
 const path_1 = __importDefault(require("path"));
 const consolidate_1 = __importDefault(require("consolidate"));
 const users_controller_1 = require("./users/users.controller");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const user_middleware_1 = require("./common/middlewares/user.middleware");
 let App = class App {
     constructor(logger, dbController, usersController) {
         this.logger = logger;
@@ -49,6 +51,8 @@ let App = class App {
     }
     useMiddleware() {
         this.app.use((0, body_parser_1.json)());
+        this.app.use((0, cookie_parser_1.default)());
+        this.app.use(user_middleware_1.declareUser);
         this.app.use(express_1.default.urlencoded());
         this.app.use(express_1.default.static(path_1.default.join(__dirname, 'front')));
         this.app.engine('html', consolidate_1.default.ejs);

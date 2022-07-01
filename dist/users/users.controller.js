@@ -29,74 +29,57 @@ const inversify_1 = require("inversify");
 require("reflect-metadata");
 const base_controller_1 = require("../common/base.controller");
 const types_1 = require("../types");
-const users_model_1 = __importDefault(require("./users.model"));
+const url_1 = __importDefault(require("url"));
 let UsersController = class UsersController extends base_controller_1.BaseContorller {
-    constructor(loggerService) {
+    constructor(usersService, loggerService) {
         super(loggerService);
+        this.usersService = usersService;
         this.loggerService = loggerService;
         this.bindRoutes([
             { path: '/login', method: 'get', func: this.loginEntry },
             { path: '/login-success', method: 'post', func: this.login },
             { path: '/register', method: 'get', func: this.registerEntry },
             { path: '/register-result', method: 'post', func: this.register },
+            { path: '/', method: 'get', func: this.home },
         ]);
     }
     login(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!req.body.email || !req.body.password) {
-                this.loggerService.warn('Enter email and password for login');
+                res.json({
+                    eMsg: 'You must fill all fields',
+                });
+                return;
             }
-            yield users_model_1.default.find({ email: req.body.email })
-                .exec()
-                .then((result) => {
-                if (result[0].email == req.body.email && result[0].password == req.body.password) {
-                    res.render('front.login-success.ejs', {
-                        title: 'Welcome',
-                        name: result[0].name,
-                        possibilities: result[0].possibilities,
-                    });
-                }
-                else if (result[0].email == req.body.email && result[0].password != req.body.password) {
-                }
-                else {
-                }
-            })
-                .catch((error) => {
-                throw error;
-            });
+            const result = yield this.usersService.validateUser(req.body);
+            if (!result) {
+                res.json({
+                    eMsg: 'Your email or password is invalid',
+                });
+            }
+            else {
+                res.cookie('login', result._id);
+                res.redirect(`/`);
+            }
         });
     }
     register(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!req.body.name || !req.body.email || !req.body.password || !req.body.possibilities) {
-                this.loggerService.warn('You must fill all fields');
-            }
-            yield users_model_1.default.find({ email: req.body.email })
-                .exec()
-                .then((result) => {
-                if (result[0].email == req.body.email) {
-                }
-            })
-                .catch((error) => {
-                throw error;
-            });
-            yield users_model_1.default.create({
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-                possibilities: req.body.possibilities,
-            })
-                .then((result) => {
-                res.render('front.register-result.ejs', {
-                    title: 'Register Result',
-                    name: result.name,
-                    email: result.email,
-                    password: result.password,
-                    possibilities: result.possibilities,
+                res.json({
+                    eMsg: 'You must fill all fields',
                 });
-            })
-                .catch((error) => {
-                throw error;
+                return;
+            }
+            const result = yield this.usersService.createUser(req.body);
+            if (!result) {
+                res.json({
+                    eMsg: 'This email already registered',
+                });
+                return;
+            }
+            res.json({
+                msg: 'You successfully registered',
             });
         });
     }
@@ -106,10 +89,20 @@ let UsersController = class UsersController extends base_controller_1.BaseContor
     registerEntry(req, res, next) {
         res.render('front.register.ejs', { title: 'Register' });
     }
+    home(req, res, next) {
+        const queryObject = url_1.default.parse(req.url, true).query;
+        res.render('front.home.ejs', {
+            title: 'Homepage',
+            user: req.user,
+            eMsg: queryObject.eMsg || undefined,
+        });
+    }
 };
 UsersController = __decorate([
-    __param(0, (0, inversify_1.inject)(types_1.TYPES.ILogger)),
-    __metadata("design:paramtypes", [Object])
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.UserService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.ILogger)),
+    __metadata("design:paramtypes", [Object, Object])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map

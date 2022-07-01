@@ -28,6 +28,7 @@ const items = new mongoose_1.Schema({
     name: { type: String, required: true },
     cost: { type: Number, required: true },
     amount: { type: Number, required: true },
+    user: { type: String, required: true, ref: 'User' },
 });
 exports.default = mongoose_1.default.model('ItemsModel', items);
 //# sourceMappingURL=db.model.js.map

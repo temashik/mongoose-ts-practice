@@ -2,6 +2,8 @@ import { Container, ContainerModule, interfaces } from 'inversify';
 import { App } from './app';
 import { DatabaseController } from './db/database.controller';
 import { IDbController } from './db/database.controller.interface';
+import { ItemsService } from './db/items.service';
+import { IItemsService } from './db/items.service.interface';
 import { ILogger } from './logger/logger.interface';
 import { LoggerService } from './logger/logger.service';
 import { TYPES } from './types';
@@ -20,7 +22,8 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
 	bind<App>(TYPES.Application).to(App);
 	bind<IDbController>(TYPES.DatabaseController).to(DatabaseController).inSingletonScope();
 	bind<IUsersController>(TYPES.UsersController).to(UsersController).inSingletonScope();
-	bind<IUserService>(TYPES.UsersService).to(UserService);
+	bind<IUserService>(TYPES.UserService).to(UserService);
+	bind<IItemsService>(TYPES.ItemsService).to(ItemsService);
 });
 
 function bootstrap(): IBootstrapReturn {

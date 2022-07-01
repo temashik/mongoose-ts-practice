@@ -11,8 +11,8 @@ $(document).ready(() => {
 				possibilities: $('#possibilities').val(),
 			},
 			success: function (result) {
-				if (result.eMsg || result.err) {
-					alert(result.eMsg || result.err);
+				if (result.eMsg) {
+					$('#error').html('<strong>' + result.eMsg + '</strong>');
 				} else {
 					alert(result.msg);
 					window.location.replace('/login');

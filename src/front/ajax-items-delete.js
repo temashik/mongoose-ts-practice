@@ -6,9 +6,7 @@ $(document).ready(() => {
 			method: 'POST',
 			url: '/delete-result',
 			data: {
-				name: $('#name').val(),
-				cost: $('#cost').val(),
-				amount: $('#amount').val(),
+				_id: $('#_id').val(),
 			},
 			success: function (result) {
 				if (result.eMsg) {

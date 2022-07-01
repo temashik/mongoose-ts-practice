@@ -1,4 +1,5 @@
 import { hash, compare } from 'bcryptjs';
+import { IId } from '../db/db_config/db.model';
 
 export class User {
 	private _password: string;
@@ -6,7 +7,13 @@ export class User {
 		private readonly _name: string,
 		private readonly _email: string,
 		private readonly _possibilities: number,
-	) {}
+		passwordHash?: string,
+		private readonly __id?: IId | undefined,
+	) {
+		if (passwordHash) {
+			this._password = passwordHash;
+		}
+	}
 
 	get email(): string {
 		return this._email;
@@ -22,6 +29,10 @@ export class User {
 
 	get password(): string {
 		return this._password;
+	}
+
+	get _id(): IId | undefined {
+		return this.__id;
 	}
 
 	public async setPassword(pass: string, salt: number): Promise<void> {

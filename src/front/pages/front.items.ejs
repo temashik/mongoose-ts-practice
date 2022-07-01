@@ -3,6 +3,7 @@
 <head>
 	<%- include ("../partials/header.ejs")%>
 	<%- include ("../partials/action.selector.ejs")%>
+	<script type="text/javascript" src="ajax-items-delete.js"></script>
 </head>
 
 <body>
@@ -17,9 +18,10 @@
 <input type="text" value="<%= _id%>" size='15' name='_id' disabled="true">
 <input type="submit" value="Update" onfocus="onclick">
 </form>
-<form action="/delete-result" method="post"  class="contentWrapper">
-	<input value="<%= _id%>" size='15' name='_id' type="hidden">
+<form id="delete" action="/delete-result" method="post"  class="contentWrapper">
+	<input id="_id" value="<%= _id%>" size='15' name='_id' type="hidden">
 	<input type="submit" value="Delete" onfocus="onclick">
+	<div id="error"></div>
 </form>
 </body>
 </html>

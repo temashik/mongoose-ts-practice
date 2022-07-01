@@ -10,6 +10,8 @@ import connecting from './db/db_config/db.connect';
 import path from 'path';
 import consolidate from 'consolidate';
 import { UsersController } from './users/users.controller';
+import cookieParser from 'cookie-parser';
+import { declareUser } from './common/middlewares/user.middleware';
 
 @injectable()
 export class App {
@@ -33,6 +35,8 @@ export class App {
 
 	useMiddleware(): void {
 		this.app.use(json());
+		this.app.use(cookieParser());
+		this.app.use(declareUser);
 		this.app.use(express.urlencoded());
 		this.app.use(express.static(path.join(__dirname, 'front')));
 		this.app.engine('html', consolidate.ejs);

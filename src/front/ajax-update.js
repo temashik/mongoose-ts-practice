@@ -13,10 +13,13 @@ $(document).ready(() => {
 				newAmount: $('#newAmount').val(),
 			},
 			success: function (result) {
-				if (result.eMsg || result.err) {
-					alert(result.eMsg || result.err);
+				if (result.eRoot) {
+					window.location.replace(`/?eMsg=${result.eRoot}`);
+				} else if (result.eMsg) {
+					$('#error').html('<strong>' + result.eMsg + '</strong>');
 				} else {
 					alert('Document was successfully updated');
+					$('body').replaceWith(result);
 					//$('#weather-temp').html('<strong>' + result + '</strong> degrees');
 				}
 			},

@@ -9,10 +9,10 @@ $(document).ready(() => {
 				password: $('#password').val(),
 			},
 			success: function (result) {
-				if (result.eMsg || result.err) {
-					alert(result.eMsg || result.err);
+				if (result.eMsg) {
+					$('#error').html('<strong>' + result.eMsg + '</strong>');
 				} else {
-					$('body').replaceWith(result);
+					window.location.replace('/');
 					//$('#weather-temp').html('<strong>' + result + '</strong> degrees');
 				}
 			},

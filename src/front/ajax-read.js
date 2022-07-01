@@ -10,8 +10,10 @@ $(document).ready(() => {
 				amount: $('#amount').val(),
 			},
 			success: function (result) {
-				if (result.eMsg || result.err) {
-					alert(result.eMsg || result.err);
+				if (result.eRoot) {
+					window.location.replace(`/?eMsg=${result.eRoot}`);
+				} else if (result.eMsg) {
+					$('#error').html('<strong>' + result.eMsg + '</strong>');
 				} else {
 					$('body').replaceWith(result);
 					//$('#weather-temp').html('<strong>' + result + '</strong> degrees');

@@ -3,62 +3,43 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { User } from './user.entity';
 import { IUserService } from './users.service.interface';
+import UsersModel from './users.model';
 
 @injectable()
 export class UserService implements IUserService {
-	async createUser({
-		email,
-		name,
-		password,
-		possibilities,
-	}: UserRegisterDto): Promise<User | null> {
-		const newUser = new User(email, name, possibilities);
-		await newUser.setPassword(password, Number(process.env.SALT || 666));
-		let shouldStopProccess = false;
-
-		await UsersModel.find({ email: email })
-			.exec()
-			.then((result) => {
-				if (result.length > 0) {
-					res.json({
-						eMsg: 'This email already registered',
-					});
-					shouldStopProccess = true;
-				}
-			})
-			.catch((error: Error) => {
-				res.json({
-					err: error.message,
-				});
-				return;
-			});
-
-		if (shouldStopProccess) {
-			return;
+	async createUser({ name, email, password, possibilities }: UserRegisterDto): Promise<boolean> {
+		const newUser = new User(name, email, possibilities);
+		const salt = process.env.SALT || 666;
+		await newUser.setPassword(password, 6);
+		const findResult = await UsersModel.findOne({ email: newUser.email });
+		if (findResult) {
+			return false;
 		}
-
 		await UsersModel.create({
-			name: req.body.name,
-			email: req.body.email,
-			password: req.body.password,
-			possibilities: req.body.possibilities,
-		})
-			.then((result) => {
-				res.json({
-					msg: 'You successfully registered',
-				});
-				return;
-			})
-			.catch((error: Error) => {
-				res.json({
-					err: error.message,
-				});
-				return;
-			});
-		return null;
+			name: newUser.name,
+			email: newUser.email,
+			password: newUser.password,
+			possibilities: newUser.possibilities,
+		});
+		return true;
 	}
 
-	validateUser(dto: UserLoginDto): boolean {
-		return true;
+	async validateUser({ email, password }: UserLoginDto): Promise<User | null> {
+		const existedUser = await UsersModel.findOne({ email: email });
+		if (!existedUser) {
+			return null;
+		}
+		const newUser = new User(
+			existedUser.name,
+			existedUser.email,
+			existedUser.possibilities,
+			existedUser.password,
+			existedUser._id,
+		);
+		if (await newUser.comparePassword(password)) {
+			return newUser;
+		} else {
+			return null;
+		}
 	}
 }

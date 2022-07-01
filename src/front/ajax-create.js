@@ -10,14 +10,13 @@ $(document).ready(() => {
 				amount: $('#amount').val(),
 			},
 			success: function (result) {
-				if (result.eMsg || result.err) {
-					alert(result.eMsg || result.err);
+				if (result.eRoot) {
+					window.location.replace(`/?eMsg=${result.eRoot}`);
+				} else if (result.eMsg) {
+					$('#error').html('<strong>' + result.eMsg + '</strong>');
 				} else {
-					alert(
-						`You created document with fields: Name = ${result.name}, Cost = ${result.cost}, Amount = ${result.amount}`,
-					);
+					alert('You successfully created document ');
 					window.location.replace(`/items?_id=${result._id}`);
-					//$('#weather-temp').html('<strong>' + result + '</strong> degrees');
 				}
 			},
 		});

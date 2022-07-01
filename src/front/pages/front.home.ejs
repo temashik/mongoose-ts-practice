@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% if (user) { %>
+		<%- include ("../partials/action.selector.ejs")%>
+	<% } %>
+	<%- include ("../partials/header.ejs")%>
+</head>
+
+<body>
+	<% if (user) { %>
+		<form class="contentWrapper">
+			<h4>Welcome, <%= user.name%>! Your possibilities: <%= user.roots%></h4>
+		</form>
+	<% } else { %>
+		<form id="login" action="/login" method="get"  class="contentWrapper">
+			<input type="submit" value="Login" onfocus="onclick">
+			</form>
+			<form id="register" action="/register" method="get"  class="contentWrapper">
+			<input type="submit" value="Register" onfocus="onclick">
+			</form>
+		
+	<% } %>
+	<% if (eMsg) { %>
+		<h2><%= eMsg %></h2>
+	<% } %>
+</body>
+</html>

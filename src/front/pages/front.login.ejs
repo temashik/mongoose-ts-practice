@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+	<script type="text/javascript" src="ajax-login.js"></script>
+</head>
+
+<body>
+<form id="login" action="/login-success" method="post"  class="contentWrapper">
+<label for="email">Email: </label>
+<input id="email" class="email" type="email" size='15' name='email'>
+<label for="password">Password: </label>
+<input id="password" type="password" size='15' name='password'>
+<input type="submit" value="Log in" onfocus="onclick">
+<div id="error"></div>
+</form>
+</body>
+</html>

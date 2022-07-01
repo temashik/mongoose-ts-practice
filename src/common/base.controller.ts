@@ -34,7 +34,7 @@ export abstract class BaseContorller {
 		for (const route of routes) {
 			this.logger.log(`[${route.method}] ${route.path}`);
 			const handler = route.func.bind(this);
-			this.router[route.method](route.path, route.func);
+			this.router[route.method](route.path, handler);
 		}
 	}
 }

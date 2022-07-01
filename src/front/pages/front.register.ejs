@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+	<script type="text/javascript" src="ajax-register.js"></script>
+</head>
+
+<body>
+<form id="register" action="/register-result" method="post" class="contentWrapper">
+<label for="name">Name: </label>
+<input id="name" type="text" size='15' name='name'>
+<label for="email">Email: </label>
+<input class="email" id="email" type="email" size='15' name='email'>
+<label for="password">Password: </label>
+<input id="password" type="password" size='15' name='password'>
+<label for="possibilities">Possibilities: </label>
+<input id="possibilities" type="text" size='15' name='possibilities'>
+<input type="submit" value="Register" onfocus="onclick">
+<div id="error"></div>
+</form>
+</body>
+</html>

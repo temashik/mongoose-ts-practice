@@ -2,23 +2,26 @@
 <html>
 <head>
 	<%- include ("../partials/header.ejs")%>
+	<%- include ("../partials/action.selector.ejs")%>
+	<script type="text/javascript" src="ajax-update.js"></script>
 </head>
 
 <body>
-<form action="/db/update-result" method="post" class="contentWrapper">
+<form id="update" action="/update-result" method="post" class="contentWrapper">
 <label for="name">Name: </label>
-<input type="text" value="<%= name%>" size='15' name='name'>
+<input id="name" type="text" value="<%= name%>" size='15' name='name'>
 <label for="newName">New Name: </label>
-<input type="text" size='15' name='newName'>
+<input id="newName" type="text" size='15' name='newName'>
 <label for="cost">Cost: </label>
-<input type="text" value="<%= cost%>" size='15' name='cost'>
+<input id="cost" type="text" value="<%= cost%>" size='15' name='cost'>
 <label for="newCost">New Cost: </label>
-<input type="text" size='15' name='newCost'>
+<input id="newCost" type="text" size='15' name='newCost'>
 <label for="amount">Amount: </label>
-<input type="text" value="<%= amount%>" size='15' name='amount'>
+<input id="amount" type="text" value="<%= amount%>" size='15' name='amount'>
 <label for="newAmount">New Amount: </label>
-<input type="text" size='15' name='newAmount'>
+<input id="newAmount" type="text" size='15' name='newAmount'>
 <input type="submit" value="Update" onfocus="onclick">
+<div id="error"></div>
 </form>
 </body>
 </html>

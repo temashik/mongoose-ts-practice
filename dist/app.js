@@ -34,22 +34,25 @@ const types_1 = require("./types");
 const db_connect_1 = __importDefault(require("./db/db_config/db.connect"));
 const path_1 = __importDefault(require("path"));
 const consolidate_1 = __importDefault(require("consolidate"));
+const users_controller_1 = require("./users/users.controller");
 let App = class App {
-    constructor(logger, dbController) {
+    constructor(logger, dbController, usersController) {
         this.logger = logger;
         this.dbController = dbController;
+        this.usersController = usersController;
         this.app = (0, express_1.default)();
         this.port = +(process.env.PORT || 8000);
     }
     useRoutes() {
-        this.app.use('/db', this.dbController.router);
+        this.app.use('/', this.dbController.router);
+        this.app.use('/', this.usersController.router);
     }
     useMiddleware() {
         this.app.use((0, body_parser_1.json)());
         this.app.use(express_1.default.urlencoded());
         this.app.use(express_1.default.static(path_1.default.join(__dirname, 'front')));
         this.app.engine('html', consolidate_1.default.ejs);
-        this.app.set('views', __dirname + '/front');
+        this.app.set('views', __dirname + '/front/pages');
         this.app.set('view engine', 'html');
     }
     init() {
@@ -70,7 +73,9 @@ App = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(types_1.TYPES.ILogger)),
     __param(1, (0, inversify_1.inject)(types_1.TYPES.DatabaseController)),
-    __metadata("design:paramtypes", [Object, database_controller_1.DatabaseController])
+    __param(2, (0, inversify_1.inject)(types_1.TYPES.UsersController)),
+    __metadata("design:paramtypes", [Object, database_controller_1.DatabaseController,
+        users_controller_1.UsersController])
 ], App);
 exports.App = App;
 //# sourceMappingURL=app.js.map

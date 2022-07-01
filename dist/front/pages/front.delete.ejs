@@ -2,17 +2,24 @@
 <html>
 <head>
 	<%- include ("../partials/header.ejs")%>
+	<%- include ("../partials/action.selector.ejs")%>
+	<script type="text/javascript" src="ajax-delete.js"></script>
 </head>
 
 <body>
+<<<<<<< Updated upstream
 <form action="/db/delete-result" method="post"  class="contentWrapper">
+=======
+<form id="delete" action="/delete-result" method="post"  class="contentWrapper">
+>>>>>>> Stashed changes
 <label for="name">Name: </label>
-<input type="text" size='15' name='name'>
+<input id="name" type="text" size='15' name='name'>
 <label for="cost">Cost: </label>
-<input type="text" size='15' name='cost'>
+<input id="cost" type="text" size='15' name='cost'>
 <label for="amount">Amount: </label>
-<input type="text" size='15' name='amount'>
+<input id="amount" type="text" size='15' name='amount'>
 <input type="submit" value="Delete" onfocus="onclick">
+<div id="error"></div>
 </form>
 </body>
 </html>

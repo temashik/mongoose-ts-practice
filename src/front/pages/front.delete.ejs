@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+	<%- include ("../partials/action.selector.ejs")%>
+	<script type="text/javascript" src="ajax-delete.js"></script>
+</head>
+
+<body>
+<form id="delete" action="/delete-result" method="post"  class="contentWrapper">
+<label for="name">Name: </label>
+<input id="name" type="text" size='15' name='name'>
+<label for="cost">Cost: </label>
+<input id="cost" type="text" size='15' name='cost'>
+<label for="amount">Amount: </label>
+<input id="amount" type="text" size='15' name='amount'>
+<input type="submit" value="Delete" onfocus="onclick">
+<div id="error"></div>
+</form>
+</body>
+</html>

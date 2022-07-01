@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+</head>
+
+<body>
+<form action="/create-result" method="post"  class="contentWrapper">
+<label for="name">Name: </label>
+<input type="text" size='15' name='name'>
+<label for="cost">Cost: </label>
+<input type="text" size='15' name='cost'>
+<label for="amount">Amount: </label>
+<input type="text" size='15' name='amount'>
+<input type="submit" value="Create" onfocus="onclick">
+</form>
+</body>
+</html>

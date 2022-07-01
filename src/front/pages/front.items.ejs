@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+	<%- include ("../partials/action.selector.ejs")%>
+	<script type="text/javascript" src="ajax-items-delete.js"></script>
+</head>
+
+<body>
+<form action="/update" method="post"  class="contentWrapper">
+<label for="name">Name: </label>
+<input type="text" value="<%= name%>" size='15' name='name'>
+<label for="cost">Cost: </label>
+<input type="text" value="<%= cost%>" size='15' name='cost'>
+<label for="amount">Amount: </label>
+<input type="text" value="<%= amount%>" size='15' name='amount'>
+<label for="_id">ID: </label>
+<input type="text" value="<%= _id%>" size='15' name='_id' disabled="true">
+<input type="submit" value="Update" onfocus="onclick">
+</form>
+<form id="delete" action="/delete-result" method="post"  class="contentWrapper">
+	<input id="_id" value="<%= _id%>" size='15' name='_id' type="hidden">
+	<input type="submit" value="Delete" onfocus="onclick">
+	<div id="error"></div>
+</form>
+</body>
+</html>

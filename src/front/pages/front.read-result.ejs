@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+	<%- include ("../partials/action.selector.ejs")%>
+</head>
+
+<body>
+<% for(var i=0; i < result.length; i++) {%>
+<form action="/items" method="get"  class="contentWrapper">
+<label for="name">We found your document with fields: </label>
+<label for="name">Name: </label>
+<input type="text" value="<%= result[i].name%>" size='15' name='name'>
+<label for="cost">Cost: </label>
+<input type="text" value="<%= result[i].cost%>" size='15' name='cost'>
+<label for="amount">Amount: </label>
+<input type="text" value="<%= result[i].amount%>"" size='15' name='amount'>
+<input value="<%= result[i]._id%>" name="_id" type="hidden">
+<input type="submit" value="View" onfocus="onclick">
+</form>
+<%}%>
+</body>
+</html>

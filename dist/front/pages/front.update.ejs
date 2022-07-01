@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include ("../partials/header.ejs")%>
+</head>
+
+<body>
+<form action="/update-result" method="post" class="contentWrapper">
+<label for="name">Name: </label>
+<input type="text" value="<%= name%>" size='15' name='name'>
+<label for="newName">New Name: </label>
+<input type="text" size='15' name='newName'>
+<label for="cost">Cost: </label>
+<input type="text" value="<%= cost%>" size='15' name='cost'>
+<label for="newCost">New Cost: </label>
+<input type="text" size='15' name='newCost'>
+<label for="amount">Amount: </label>
+<input type="text" value="<%= amount%>" size='15' name='amount'>
+<label for="newAmount">New Amount: </label>
+<input type="text" size='15' name='newAmount'>
+<input type="submit" value="Update" onfocus="onclick">
+</form>
+</body>
+</html>

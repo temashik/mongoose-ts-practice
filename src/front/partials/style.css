@@ -1,0 +1,16 @@
+.contentWrapper
+{
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 150px;
+}
+.email:invalid 
+{
+	background-color: #ffdddd;
+}
+
+/*.email:valid 
+{
+	background-color: #ddffdd;
+}*/

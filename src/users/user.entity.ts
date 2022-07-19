@@ -6,9 +6,11 @@ export class User {
 	constructor(
 		private readonly _name: string,
 		private readonly _email: string,
-		private readonly _possibilities: number,
+		private readonly _possibilities?: number | undefined,
 		passwordHash?: string,
 		private readonly __id?: IId | undefined,
+		private readonly _oauth2Id?: string,
+		private readonly _oauth2Type?: string,
 	) {
 		if (passwordHash) {
 			this._password = passwordHash;
@@ -23,7 +25,7 @@ export class User {
 		return this._name;
 	}
 
-	get possibilities(): number {
+	get possibilities(): number | undefined {
 		return this._possibilities;
 	}
 
@@ -33,6 +35,13 @@ export class User {
 
 	get _id(): IId | undefined {
 		return this.__id;
+	}
+
+	get oauth2Id(): string | undefined {
+		return this._oauth2Id;
+	}
+	get oauth2Type(): string | undefined {
+		return this._oauth2Type;
 	}
 
 	public async setPassword(pass: string, salt: number): Promise<void> {

@@ -12,12 +12,14 @@ import consolidate from 'consolidate';
 import { UsersController } from './users/users.controller';
 import cookieParser from 'cookie-parser';
 import { declareUser } from './common/middlewares/user.middleware';
+import { Passport } from 'passport';
 
 @injectable()
 export class App {
 	app: Express;
 	server: Server;
 	port: number;
+	passport: typeof Passport;
 
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,

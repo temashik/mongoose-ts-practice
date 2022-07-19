@@ -4,6 +4,9 @@ import { UserRegisterDto } from './dto/user-register.dto';
 import { User } from './user.entity';
 import { IUserService } from './users.service.interface';
 import UsersModel from './users.model';
+import { UserOauth2Dto } from './dto/user-oauth2.dto';
+import axios from 'axios';
+import 'dotenv/config';
 
 @injectable()
 export class UserService implements IUserService {
@@ -41,5 +44,54 @@ export class UserService implements IUserService {
 		} else {
 			return null;
 		}
+	}
+
+	async createGoogleUser(
+		{ name, email, oauth2Id }: UserOauth2Dto,
+		oauth2Type: string,
+	): Promise<User | null> {
+		let existedUser = await UsersModel.findOne({ email, oauth2Id });
+		if (!existedUser) {
+			await UsersModel.create({ name, email, oauth2Id, oauth2Type });
+			existedUser = await UsersModel.findOne({ email, oauth2Id });
+		}
+		if (existedUser == null) {
+			return null;
+		}
+		return new User(
+			existedUser.name,
+			existedUser.email,
+			undefined,
+			undefined,
+			existedUser._id,
+			existedUser.oauth2Id,
+			existedUser.oauth2Type,
+		);
+	}
+
+	async fbGetToken(code: any): Promise<any> {
+		const { data } = await axios({
+			url: 'https://graph.facebook.com/v4.0/oauth/access_token',
+			method: 'get',
+			params: {
+				client_id: process.env.CLIENT_ID_FB,
+				client_secret: process.env.CLIENT_SECRET_FB,
+				redirect_uri: 'http://localhost:8000/fbcallback/',
+				code,
+			},
+		});
+		return data;
+	}
+
+	async fbGetData(accesstoken: any): Promise<any> {
+		const { data } = await axios({
+			url: 'https://graph.facebook.com/me',
+			method: 'get',
+			params: {
+				fields: ['id', 'email', 'name'].join(','),
+				access_token: accesstoken,
+			},
+		});
+		return data;
 	}
 }

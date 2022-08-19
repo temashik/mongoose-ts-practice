@@ -12,11 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const bcryptjs_1 = require("bcryptjs");
 class User {
-    constructor(_name, _email, _possibilities, passwordHash, __id) {
+    constructor(_name, _email, _possibilities, passwordHash, __id, _oauth2Id, _oauth2Type) {
         this._name = _name;
         this._email = _email;
         this._possibilities = _possibilities;
         this.__id = __id;
+        this._oauth2Id = _oauth2Id;
+        this._oauth2Type = _oauth2Type;
         if (passwordHash) {
             this._password = passwordHash;
         }
@@ -35,6 +37,12 @@ class User {
     }
     get _id() {
         return this.__id;
+    }
+    get oauth2Id() {
+        return this._oauth2Id;
+    }
+    get oauth2Type() {
+        return this._oauth2Type;
     }
     setPassword(pass, salt) {
         return __awaiter(this, void 0, void 0, function* () {

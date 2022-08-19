@@ -27,8 +27,10 @@ const mongoose_1 = __importStar(require("mongoose"));
 const users = new mongoose_1.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
-    possibilities: { type: Number, required: true },
+    password: { type: String, required: false },
+    possibilities: { type: Number, required: false },
+    oauth2Id: { type: String, required: false },
+    oauth2Type: { type: String, require: false },
 });
 exports.default = mongoose_1.default.model('UsersModel', users);
 //# sourceMappingURL=users.model.js.map

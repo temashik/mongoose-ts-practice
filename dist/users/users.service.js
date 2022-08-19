@@ -22,6 +22,8 @@ exports.UserService = void 0;
 const inversify_1 = require("inversify");
 const user_entity_1 = require("./user.entity");
 const users_model_1 = __importDefault(require("./users.model"));
+const axios_1 = __importDefault(require("axios"));
+require("dotenv/config");
 let UserService = class UserService {
     createUser({ name, email, password, possibilities }) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -54,6 +56,47 @@ let UserService = class UserService {
             else {
                 return null;
             }
+        });
+    }
+    createGoogleUser({ name, email, oauth2Id }, oauth2Type) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let existedUser = yield users_model_1.default.findOne({ email, oauth2Id });
+            if (!existedUser) {
+                yield users_model_1.default.create({ name, email, oauth2Id, oauth2Type });
+                existedUser = yield users_model_1.default.findOne({ email, oauth2Id });
+            }
+            if (existedUser == null) {
+                return null;
+            }
+            return new user_entity_1.User(existedUser.name, existedUser.email, undefined, undefined, existedUser._id, existedUser.oauth2Id, existedUser.oauth2Type);
+        });
+    }
+    fbGetToken(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data } = yield (0, axios_1.default)({
+                url: 'https://graph.facebook.com/v4.0/oauth/access_token',
+                method: 'get',
+                params: {
+                    client_id: process.env.CLIENT_ID_FB,
+                    client_secret: process.env.CLIENT_SECRET_FB,
+                    redirect_uri: 'http://localhost:8000/fbcallback/',
+                    code,
+                },
+            });
+            return data;
+        });
+    }
+    fbGetData(accesstoken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data } = yield (0, axios_1.default)({
+                url: 'https://graph.facebook.com/me',
+                method: 'get',
+                params: {
+                    fields: ['id', 'email', 'name'].join(','),
+                    access_token: accesstoken,
+                },
+            });
+            return data;
         });
     }
 };

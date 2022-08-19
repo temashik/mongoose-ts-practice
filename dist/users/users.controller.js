@@ -30,6 +30,9 @@ require("reflect-metadata");
 const base_controller_1 = require("../common/base.controller");
 const types_1 = require("../types");
 const url_1 = __importDefault(require("url"));
+const googleapis_1 = require("googleapis");
+const query_string_1 = require("query-string");
+require("dotenv/config");
 let UsersController = class UsersController extends base_controller_1.BaseContorller {
     constructor(usersService, loggerService) {
         super(loggerService);
@@ -41,6 +44,10 @@ let UsersController = class UsersController extends base_controller_1.BaseContor
             { path: '/register', method: 'get', func: this.registerEntry },
             { path: '/register-result', method: 'post', func: this.register },
             { path: '/', method: 'get', func: this.home },
+            { path: '/gauth', method: 'get', func: this.googleAuth },
+            { path: '/gcallback', method: 'get', func: this.gCallback },
+            { path: '/fbauth', method: 'get', func: this.facebookAuth },
+            { path: '/fbcallback', method: 'get', func: this.fbCallback },
         ]);
     }
     login(req, res, next) {
@@ -90,11 +97,82 @@ let UsersController = class UsersController extends base_controller_1.BaseContor
         res.render('front.register.ejs', { title: 'Register' });
     }
     home(req, res, next) {
-        const queryObject = url_1.default.parse(req.url, true).query;
-        res.render('front.home.ejs', {
-            title: 'Homepage',
-            user: req.user,
-            eMsg: queryObject.eMsg || undefined,
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryObject = url_1.default.parse(req.url, true).query;
+            res.render('front.home.ejs', {
+                title: 'Homepage',
+                user: req.user,
+                eMsg: queryObject.eMsg || undefined,
+            });
+        });
+    }
+    googleAuth(req, res, next) {
+        const oauth2Client = new googleapis_1.google.auth.OAuth2('127659636571-hg34uvk9m0t301f3s4ca21fcnqpv0aek.apps.googleusercontent.com', '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', 'http://localhost:8000/gcallback');
+        const redirectUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            prompt: 'consent',
+            scope: ['email', 'profile'],
+        });
+        res.redirect(redirectUrl);
+    }
+    gCallback(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const oauth2Client = new googleapis_1.google.auth.OAuth2('127659636571-hg34uvk9m0t301f3s4ca21fcnqpv0aek.apps.googleusercontent.com', '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', 'http://localhost:8000/gcallback');
+            const code = req.query.code;
+            const { tokens } = yield oauth2Client.getToken(code);
+            oauth2Client.setCredentials(tokens);
+            const oauth2 = googleapis_1.google.oauth2({ version: 'v2', auth: oauth2Client });
+            const userInfo = yield oauth2.userinfo.v2.me.get();
+            const data = {
+                name: userInfo.data.name,
+                email: userInfo.data.email,
+                oauth2Id: userInfo.data.id,
+            };
+            const successLogin = yield this.usersService.createGoogleUser(data, 'Google');
+            if (!successLogin) {
+                res.json({
+                    eMsg: 'Something went wrong',
+                });
+            }
+            else {
+                res.cookie('login', successLogin._id);
+                res.redirect('/');
+            }
+        });
+    }
+    facebookAuth(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stringifiedParams = (0, query_string_1.stringify)({
+                client_id: process.env.CLIENT_ID_FB,
+                redirect_uri: 'http://localhost:8000/fbcallback/',
+                scope: ['email', 'user_friends'].join(','),
+                response_type: 'code',
+                auth_type: 'rerequest',
+                display: 'popup',
+            });
+            res.redirect(`https://www.facebook.com/v4.0/dialog/oauth?${stringifiedParams}`);
+        });
+    }
+    fbCallback(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const code = url_1.default.parse(req.url, true).query;
+            const accessToken = yield this.usersService.fbGetToken(code.code);
+            const data = yield this.usersService.fbGetData(accessToken.access_token);
+            const userData = {
+                name: data.name,
+                email: data.email,
+                oauth2Id: data.id,
+            };
+            const successLogin = yield this.usersService.createGoogleUser(userData, 'Facebook');
+            if (!successLogin) {
+                res.json({
+                    eMsg: 'Something went wrong',
+                });
+            }
+            else {
+                res.cookie('login', successLogin._id);
+                res.redirect('/');
+            }
         });
     }
 };

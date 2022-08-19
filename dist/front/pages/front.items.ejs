@@ -7,9 +7,7 @@
 </head>
 
 <body>
-<form action="/db/update" method="post" class="contentWrapper">
 <form action="/update" method="post"  class="contentWrapper">
-<form action="/update" method="post" class="contentWrapper">
 <label for="name">Name: </label>
 <input type="text" value="<%= name%>" size='15' name='name'>
 <label for="cost">Cost: </label>
@@ -20,9 +18,6 @@
 <input type="text" value="<%= _id%>" size='15' name='_id' disabled="true">
 <input type="submit" value="Update" onfocus="onclick">
 </form>
-<form action="/db/delete-result" method="post"  class="contentWrapper">
-<form action="/delete-result" method="post"  class="contentWrapper">
-	<input value="<%= _id%>" size='15' name='_id' type="hidden">
 <form id="delete" action="/delete-result" method="post"  class="contentWrapper">
 	<input id="_id" value="<%= _id%>" size='15' name='_id' type="hidden">
 	<input type="submit" value="Delete" onfocus="onclick">

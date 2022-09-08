@@ -1,4 +1,3 @@
-import { ID } from './db_config/db.model';
 import { ItemDto } from './dto/item.dto';
 import { Items } from './item.entity';
 import { ItemUpdateDto } from './dto/item.update.dto';

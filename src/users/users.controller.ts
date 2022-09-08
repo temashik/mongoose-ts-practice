@@ -10,11 +10,8 @@ import { UserRegisterDto } from './dto/user-register.dto';
 import { IUserService } from './users.service.interface';
 import url from 'url';
 import { google } from 'googleapis';
-import passport from 'passport';
-import PassportFacebookToken from 'passport-facebook-token';
-import { stringify, parse } from 'query-string';
+import { stringify } from 'query-string';
 import 'dotenv/config';
-import axios from 'axios';
 
 @injectable()
 export class UsersController extends BaseContorller implements IUsersController {
@@ -99,8 +96,8 @@ export class UsersController extends BaseContorller implements IUsersController 
 	}
 	googleAuth(req: Request, res: Response, next: NextFunction): void {
 		const oauth2Client = new google.auth.OAuth2(
-			'127659636571-hg34uvk9m0t301f3s4ca21fcnqpv0aek.apps.googleusercontent.com',
-			'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',
+			process.env.CLIENT_ID_GOOGLE,
+			process.env.CLIENT_SECRET_GOOGLE,
 			'http://localhost:8000/gcallback',
 		);
 		const redirectUrl = oauth2Client.generateAuthUrl({
@@ -112,8 +109,8 @@ export class UsersController extends BaseContorller implements IUsersController 
 	}
 	async gCallback(req: Request, res: Response, next: NextFunction): Promise<void> {
 		const oauth2Client = new google.auth.OAuth2(
-			'127659636571-hg34uvk9m0t301f3s4ca21fcnqpv0aek.apps.googleusercontent.com',
-			'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',
+			process.env.CLIENT_ID_GOOGLE,
+			process.env.CLIENT_SECRET_GOOGLE,
 			'http://localhost:8000/gcallback',
 		);
 		const code = req.query.code;
@@ -140,7 +137,7 @@ export class UsersController extends BaseContorller implements IUsersController 
 		const stringifiedParams = stringify({
 			client_id: process.env.CLIENT_ID_FB,
 			redirect_uri: 'http://localhost:8000/fbcallback/',
-			scope: ['email', 'user_friends'].join(','), // comma seperated string
+			scope: ['email', 'user_friends'].join(','),
 			response_type: 'code',
 			auth_type: 'rerequest',
 			display: 'popup',

@@ -1,11 +1,10 @@
-import e, { Request, Response, NextFunction } from 'express';
-import { id, inject, injectable } from 'inversify';
+import { Request, Response, NextFunction } from 'express';
+import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import { BaseContorller } from '../common/base.controller';
 import { ILogger } from '../logger/logger.interface';
 import { TYPES } from '../types';
 import { IDbController } from './database.controller.interface';
-import ItemsModel from './db_config/db.model';
 import url from 'url';
 import { IItemsService } from './items.service.interface';
 

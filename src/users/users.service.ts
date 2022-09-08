@@ -12,8 +12,8 @@ import 'dotenv/config';
 export class UserService implements IUserService {
 	async createUser({ name, email, password, possibilities }: UserRegisterDto): Promise<boolean> {
 		const newUser = new User(name, email, possibilities);
-		const salt = process.env.SALT || 666;
-		await newUser.setPassword(password, 6);
+		const salt = Number(process.env.SALT) || 666;
+		await newUser.setPassword(password, salt);
 		const findResult = await UsersModel.findOne({ email: newUser.email });
 		if (findResult) {
 			return false;
